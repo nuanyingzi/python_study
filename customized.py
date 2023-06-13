@@ -30,3 +30,19 @@ class Fib(object):
 for n in Fib():
     print(n)
 
+
+class Fib2(object):
+    def __getitem__(self, item):
+        a, b = 1, 1
+        for x in range(item):
+            a, b = b, a + b
+        return a
+
+
+f = Fib2()
+print(f[0])
+print(f[1])
+print(f[2])
+print(f[3])
+print(f[4])
+
