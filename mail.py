@@ -1,28 +1,20 @@
-from email import encoders
-from email.header import Header
-from email.mime.text import MIMEText
-from email.utils import parseaddr, formataddr
-
 import smtplib
+import email.utils
+from email.mime.text import MIMEText
 
+# 创建邮件
+msg = MIMEText('This is the body of the message.')
+msg['To'] = email.utils.formataddr(('Recipient',
+                                    'zhongtao1024@gmail.com'))
+msg['From'] = email.utils.formataddr(('Author',
+                                      '852947475@qq.com'))
+msg['Subject'] = 'Simple test message'
 
-def _format_addr(s):
-    name, addr = parseaddr(s)
-    return formataddr((Header(name, 'utf-8').encode(), addr))
-
-
-from_addr = input('From: ')
-password = input('Password: ')
-to_addr = input('To: ')
-smtp_server = input('SMTP server: ')
-
-msg = MIMEText('hello, send by Python...', 'plain', 'utf-8')
-msg['From'] = _format_addr('Python爱好者 <%s>' % from_addr)
-msg['To'] = _format_addr('管理员 <%s>' % to_addr)
-msg['Subject'] = Header('来自SMTP的问候……', 'utf-8').encode()
-
-server = smtplib.SMTP(smtp_server, 25)
-server.set_debuglevel(1)
-server.login(from_addr, password)
-server.sendmail(from_addr, [to_addr], msg.as_string())
-server.quit()
+server = smtplib.SMTP('localhost', 1025)
+server.set_debuglevel(True)  # 展示与服务器的交互信息
+try:
+    server.sendmail('852947475@qq.com',
+                    ['zhongtao1024@gmail.com'],
+                    msg.as_string())
+finally:
+    server.quit()
